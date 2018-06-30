@@ -61,45 +61,6 @@ class Converter {
     })
     return childNodes
   }
-
-  /**
-   * Bottom-Up approach
-   * @param {*} nodes
-   * @param {*} endNodes
-   */
-  collectParent(nodes, endNodes) {
-    const newTree = []
-    endNodes.forEach(endNode => {
-      const idx = newTree.findIndex(tree => {
-        return tree.id === endNode.parentID
-      })
-      if (idx === -1) {
-        // 親ノードを探索
-        const filteredNodes = nodes.filter(node => node.id === endNode.parentID)
-        // 親ノードが見つからない場合はルートノードと見做す
-        const filteredNode =
-          filteredNodes.length === 1
-            ? filteredNodes[0]
-            : nodes.filter(node => node.parentID === null)[0]
-        const rootNodeIdx = newTree.findIndex(
-          rootNode => rootNode.id === filteredNode.id
-        )
-        if (rootNodeIdx === -1) {
-          filteredNode.children = []
-        }
-        console.log('filteredNode', filteredNode)
-        filteredNode.children.push(Object.assign({}, endNode))
-        newTree.push(Object.assign({}, filteredNode))
-      } else {
-        newTree[idx].children.push(Object.assign({}, endNode))
-      }
-    })
-    console.log('length', newTree.length)
-    if (newTree.length === 1) {
-      return newTree[0]
-    }
-    return this.collectParent(nodes, newTree)
-  }
 }
 
 const data = new TestData()
